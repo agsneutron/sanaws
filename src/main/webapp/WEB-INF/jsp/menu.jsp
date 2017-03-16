@@ -13,7 +13,7 @@
         <div id="navbar" class="navbar-collapse collapse navbar-inverse-collapse">
           <ul class="nav navbar-nav ">
            <li><a href="#" onclick="envia('/home')">Reporte General</a></li>
-            <li><a href="cobradores.html">Reporte por cobrador</a></li>
+            <li><a href="#"  onclick="envia('/cobradores')">Reporte por cobrador</a></li>
             <li><a href="solicitudes.html">Solicitudes</a></li>
             <li><a href="ruta-promotor.html">Ruta promotor</a></li>
             <li><a href="#" onclick="envia('/listausuarios')">Usuarios</a></li>

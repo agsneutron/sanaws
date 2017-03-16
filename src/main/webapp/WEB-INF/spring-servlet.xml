@@ -18,7 +18,7 @@
 
 	
 	<context:annotation-config />
-	<context:component-scan base-package="com.sanaTF" />	
+	<context:component-scan base-package="com.sanaws" />	
 	
 	<!-- To prevent browser's back button on displaying secured resource after logout -->
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
@@ -28,8 +28,8 @@
 	
 	<import resource="jasper-views.xml" />
 	<!-- para generación de reportes -->
-	<bean id="applicationContextProvder"
-                        class="com.sanaTF.model.ApplicationContextProvider"/>
+	<bean id="applicationContextProvider"
+                        class="com.sanaws.model.ApplicationContextProvider"/>
 	
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
@@ -41,9 +41,15 @@
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
+		<property name="annotatedClasses">
+      <list>
+        <value>com.sanaws.model.User</value>
+        <value>com.sanaws.model.Role</value>
+      </list>
+    </property>
 		<property name="packagesToScan">
     		<list>
-        		<value>com.sanaTF.model</value>
+        		<value>com.sanaws.model</value>
         	</list>
         </property>
 		<property name="configurationClass">
@@ -104,6 +110,8 @@
 	        <ref bean="localeChangeInterceptor" />
 	    </property>    
 	</bean>
+	
+	
 	
 	
 </beans>
