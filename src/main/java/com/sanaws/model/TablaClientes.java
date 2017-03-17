@@ -15,6 +15,8 @@ public class TablaClientes {
 		this.direccion = direccion;
 		this.idSolicitud = idSolicitud;
 	}
+	
+	
 
 	public String getGrupo() {
 		return grupo;
