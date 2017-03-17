@@ -19,7 +19,7 @@ import org.springframework.security.access.annotation.Secured;
 
 import com.sanaws.model.ApplicationContextProvider;
 import com.sanaws.model.Mensajes;
-import com.sanaws.model.TablaRuta;
+import com.sanaws.model.TablaClientes;
 
 @Path("/solicitudgrupal")
 public class SolicitudGrupalRestService {
@@ -295,69 +295,30 @@ public class SolicitudGrupalRestService {
     @Path("/listaGrupo")
     @Produces(MediaType.APPLICATION_JSON)
     @Secured("ROLE_ADMIN")
-	public Mensajes listado(
+	public List<TablaClientes> listado(
 			@QueryParam("grupo") String grupo,
 			@QueryParam("idgrupo") String idgrupo,
 			@QueryParam("nombrePersona") String nombrePersona
 			) throws SQLException
 	{
     	
-    	Mensajes mensaje = null;    	
-    	
-    	String queryGrupo="select * from solicitudes A, clientes B, grupos C"
-			+" where A.idCliente = B.idCliente"
-			+" and A.idgrupo = B.idgrupo"
-			+" and A.idgrupo = C.idgrupo";
-    	
-    	if (nombrePersona.compareTo("")!=0){
-    		queryGrupo+=" and B.nombre like '%" + nombrePersona + "%'";
-    	}
-    	if (idgrupo.compareTo("")!=0){
-    		queryGrupo+=" and C.idgrupo = " + idgrupo; //string, datetime
-    	}
-    	if (grupo.compareTo("")!=0){
-    		queryGrupo+=" and C.nombre like '%"+grupo+"%'";
-    	}
-    	
-			
-			 			
-    			
-    	DataSource ds = (DataSource)ApplicationContextProvider.getApplicationContext().getBean("dataSource");
-		Connection c;
-				
-		c = ds.getConnection();
-				
-		try {
-		 			
-			c = ds.getConnection();
-			Statement stmt = c.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			while (rs.next()) {		
-				TablaRuta R=new TablaRuta(rs.getInt("idCliente"),rs.getString("cliente"),rs.getString("horaDesde"),rs.getString("horaHasta"),rs.getDouble("pagoCuota"),cobro,rs.getDouble("pagoMontoCobrado"),rs.getString("descripcion"),rs.getString("pagoCobroRealizado"),rs.getDouble("negocioLatitud"),rs.getDouble("negociolongitud"),
-						rs.getString("direccion"),rs.getString("negocioNombre"),rs.getString("CreditoId"),rs.getString("folioSolicitud"),rs.getString("claveUsuario"));
-				lista.add(R);
-			}
-			rs.close();				
-			c.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			Mensajes R=new Mensajes(2,0,"Ocurrió una excepción al registrar el grupo");
-		    mensaje = R;
-			e.printStackTrace();
-		}    	
-    	
-		c.close();
-		return mensaje;
+		List<TablaClientes> listOfClientes = new ArrayList<TablaClientes>();
+		listOfClientes=createClientList(nombrePersona,idgrupo,grupo);
+		return listOfClientes;
 	}
 	
 	
-	public List<TablaRuta> createClientList(String nombrePersona,String idgrupo, String grupo)
+	public List<TablaClientes> createClientList(String nombrePersona,String idgrupo, String grupo)
 	{
 	
-		List<TablaRuta> lista=new ArrayList<TablaRuta>();
+		List<TablaClientes> lista=new ArrayList<TablaClientes>();
 		String cobro ="";
 
-		String queryGrupo="select * from solicitudes A, clientes B, grupos C"
+		String queryGrupo="select C.nombre grupo,A.idCliente,A.idSolicitud,concat(B.nombre,' ',B.apellidoPaterno,' ',B.apellidoMaterno) nombreCliente,"
+				+" concat(B.calle,' # ',B.numeroExterior,' CP: ',B.cp,' Col. ',"
+				+" (select nombre from colonias AA where AA.ColoniaID=B.idColonia and AA.estado_id=B.entidadFederativaDomicilio and AA.MunicipioID=B.idMunicipio)"
+				+" ,' ,',(select nombre from municipios AA where AA.estado_id=B.entidadFederativaDomicilio and AA.MunicipioID=B.idMunicipio)) direccion"
+				+" from solicitudes A, clientes B, grupos C"
 				+" where A.idCliente = B.idCliente"
 				+" and A.idgrupo = B.idgrupo"
 				+" and A.idgrupo = C.idgrupo";
@@ -380,10 +341,9 @@ public class SolicitudGrupalRestService {
 		try {
 			c = ds.getConnection();
 			Statement stmt = c.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
+			ResultSet rs = stmt.executeQuery(queryGrupo);
 			while (rs.next()) {		
-				TablaRuta R=new TablaRuta(rs.getInt("idCliente"),rs.getString("cliente"),rs.getString("horaDesde"),rs.getString("horaHasta"),rs.getDouble("pagoCuota"),cobro,rs.getDouble("pagoMontoCobrado"),rs.getString("descripcion"),rs.getString("pagoCobroRealizado"),rs.getDouble("negocioLatitud"),rs.getDouble("negociolongitud"),
-						rs.getString("direccion"),rs.getString("negocioNombre"),rs.getString("CreditoId"),rs.getString("folioSolicitud"),rs.getString("claveUsuario"));
+				TablaClientes R=new TablaClientes(rs.getString("grupo"),rs.getInt("idCliente"),rs.getString("nombreCliente"),rs.getString("direccion"),rs.getInt("idSolicitud"));
 				lista.add(R);
 			}
 			rs.close();				

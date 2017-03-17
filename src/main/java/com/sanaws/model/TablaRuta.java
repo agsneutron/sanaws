@@ -17,6 +17,7 @@ public class TablaRuta {
     private String idCredito;
     private String folioSolicitud;
     private String claveUsuario;
+    private int idSolicitud;
     
 	public TablaRuta(int idCliente, String cliente, String horaDesde, String horaHasta, double cuota, String cobro,
 			double cobrado, String razon, String circulo, double latitud, double longitud, String direccion,
@@ -38,6 +39,14 @@ public class TablaRuta {
 		this.idCredito = idCredito;
 		this.folioSolicitud = folioSolicitud;
 		this.claveUsuario = claveUsuario;
+	}
+	
+	public TablaRuta(int idCliente, String cliente, String direccion,int idSolicitud) {
+		super();
+		this.idCliente = idCliente;
+		this.cliente = cliente;		
+		this.direccion = direccion;		
+		this.idSolicitud = idSolicitud;		
 	}
 
 	public int getIdCliente() {
