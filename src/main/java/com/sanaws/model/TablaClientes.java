@@ -6,17 +6,43 @@ public class TablaClientes {
 	private String cliente;    
     private String direccion;    
     private int idSolicitud;
+    private String integrante;
+    private int estatus;
     
-	public TablaClientes(String grupo,int idCliente, String cliente, String direccion, int idSolicitud) {
+	
+
+	public TablaClientes(String grupo, int idCliente, String cliente, String direccion, int idSolicitud,
+			String integrante, int estatus) {
 		super();
-		this.grupo=grupo;
+		this.grupo = grupo;
 		this.idCliente = idCliente;
 		this.cliente = cliente;
 		this.direccion = direccion;
 		this.idSolicitud = idSolicitud;
+		this.integrante = integrante;
+		this.estatus = estatus;
 	}
+
 	
-	
+	public String getIntegrante() {
+		return integrante;
+	}
+
+
+	public void setIntegrante(String integrante) {
+		this.integrante = integrante;
+	}
+
+
+	public int getEstatus() {
+		return estatus;
+	}
+
+
+	public void setEstatus(int estatus) {
+		this.estatus = estatus;
+	}
+
 
 	public String getGrupo() {
 		return grupo;

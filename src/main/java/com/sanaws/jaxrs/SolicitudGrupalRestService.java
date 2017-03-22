@@ -314,12 +314,16 @@ public class SolicitudGrupalRestService {
 		List<TablaClientes> lista=new ArrayList<TablaClientes>();
 		String cobro ="";
 
-		String queryGrupo="select C.nombre grupo,A.idCliente,A.idSolicitud,concat(B.nombre,' ',B.apellidoPaterno,' ',B.apellidoMaterno) nombreCliente,"
+		String queryGrupo="select C.nombre grupo,A.idCliente,"
+				+ "D.nombreintegrante,"
+				+ "if (concat(A.fotoComprobanteDomicilio,A.fotoComprobantePropiedad,A.fotoIdentificacion,A.fotoSolicitudBuro) is null,0,1) estatus,"
+				+ "A.idSolicitud,concat(B.nombre,' ',B.apellidoPaterno,' ',B.apellidoMaterno) nombreCliente,"
 				+" concat(B.calle,' # ',B.numeroExterior,' CP: ',B.cp,' Col. ',"
 				+" (select nombre from colonias AA where AA.ColoniaID=B.idColonia and AA.estado_id=B.entidadFederativaDomicilio and AA.MunicipioID=B.idMunicipio)"
 				+" ,' ,',(select nombre from municipios AA where AA.estado_id=B.entidadFederativaDomicilio and AA.MunicipioID=B.idMunicipio)) direccion"
-				+" from solicitudes A, clientes B, grupos C"
+				+" from solicitudes A, clientes B, grupos C, integrantes D"
 				+" where A.idCliente = B.idCliente"
+				+" and B.idtipointegrante = D.idtipointegrante"
 				+" and A.idgrupo = B.idgrupo"
 				+" and A.idgrupo = C.idgrupo";
 	    	
@@ -343,7 +347,7 @@ public class SolicitudGrupalRestService {
 			Statement stmt = c.createStatement();
 			ResultSet rs = stmt.executeQuery(queryGrupo);
 			while (rs.next()) {		
-				TablaClientes R=new TablaClientes(rs.getString("grupo"),rs.getInt("idCliente"),rs.getString("nombreCliente"),rs.getString("direccion"),rs.getInt("idSolicitud"));
+				TablaClientes R=new TablaClientes(rs.getString("grupo"),rs.getInt("idCliente"),rs.getString("nombreCliente"),rs.getString("direccion"),rs.getInt("idSolicitud"),rs.getString("nombreintegrante"),rs.getInt("estatus"));
 				lista.add(R);
 			}
 			rs.close();				
@@ -360,6 +364,48 @@ public class SolicitudGrupalRestService {
 		
 		
 		
+	}
+	
+	
+	@GET
+    @Path("/guardaFotosSolicitudGrupal")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Secured("ROLE_ADMIN")
+	public Mensajes guarda(	
+			@QueryParam("idsolicitud") String idsolicitud,
+			@QueryParam("fotoIdentificacion") String fotoIdentificacion, // vacio
+			@QueryParam("fotoComprobanteDomicilio") String fotoComprobanteDomicilio, // vacio
+			@QueryParam("fotoComprobantePropiedad") String fotoComprobantePropiedad, // vacio
+			@QueryParam("fotoSolicitudBuro") String fotoSolicitudBuro // vacio
+			
+			) throws SQLException
+	{
+    	
+    	Mensajes mensaje = null;
+    	
+    	String queryCliente="update solicitudes set fotoIdentificacion = '" + fotoIdentificacion + "',"
+    			+ "fotoComprobanteDomicilio='" + fotoComprobanteDomicilio + "',"                       //string
+    			+ "fotoComprobantePropiedad='" + fotoComprobantePropiedad + "',"              //string
+    			+ "fotoSolicitudBuro='" + fotoSolicitudBuro + "'"              //string
+    			+ " where idSolicitud = " + idsolicitud;
+    	        
+    	   	
+    	
+    	DataSource ds = (DataSource)ApplicationContextProvider.getApplicationContext().getBean("dataSource");
+		Connection c;	    	
+		try {
+			c = ds.getConnection();
+			Statement stmt = c.createStatement();
+			stmt.execute(queryCliente);
+			c.close();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 	
+    	
+		
+		return mensaje;
 	}
 	
 }
