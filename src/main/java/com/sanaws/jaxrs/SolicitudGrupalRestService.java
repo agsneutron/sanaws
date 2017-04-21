@@ -397,10 +397,16 @@ public class SolicitudGrupalRestService {
 			c = ds.getConnection();
 			Statement stmt = c.createStatement();
 			stmt.execute(queryCliente);
+
+			Mensajes R=new Mensajes(0,Integer.parseInt(idsolicitud) ,"Se guardó correctamente la información en la solicitud: " + idsolicitud);
+			mensaje = R;
 			c.close();
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+			
+			Mensajes R=new Mensajes(1,0 ,"Ocurrió un error : Código de error =" + e.getErrorCode() + " Mensaje: " + e.getMessage());
+			mensaje = R;
 			e.printStackTrace();
 		} 	
     	
