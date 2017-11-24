@@ -75,10 +75,10 @@ public class PagosRestService {
 			ResultSet rs = stmt.getGeneratedKeys();
 			if (rs.next()) {
 				idPago = rs.getInt(1);	
-				Mensajes R=new Mensajes(0,idPago,"Se guardó correctamente la información");
+				Mensajes R=new Mensajes(0,idPago,"Se guardÃ³ correctamente la informaciÃ³n");
 			    mensaje = R;
 			}else{
-				Mensajes R=new Mensajes(1,0,"Ocurrió un error registrar la información");
+				Mensajes R=new Mensajes(1,0,"OcurriÃ³ un error registrar la informaciÃ³n");
 			    mensaje = R;
 			}
 			rs.close();			
@@ -86,7 +86,7 @@ public class PagosRestService {
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			Mensajes R=new Mensajes(2,0,"Ocurrió un error al registrar la información");
+			Mensajes R=new Mensajes(2,0,"OcurriÃ³ un error al registrar la informaciÃ³n");
 		    mensaje = R;
 			e.printStackTrace();
 		}    	

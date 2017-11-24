@@ -8,6 +8,7 @@
 package safisrv.ws.schemas;
 
 public interface SAFIServicios extends java.rmi.Remote {
+    public safisrv.ws.schemas.AltaSolicitudGrupalWSResponse altaSolicitudGrupalWS(safisrv.ws.schemas.AltaSolicitudGrupalWSRequest altaSolicitudGrupalWSRequest) throws java.rmi.RemoteException;
     public safisrv.ws.schemas.PagoCreditoResponse pagoCredito(safisrv.ws.schemas.PagoCreditoRequest pagoCreditoRequest) throws java.rmi.RemoteException;
     public safisrv.ws.schemas.AltaSolicitudCreditoResponse altaSolicitudCredito(safisrv.ws.schemas.AltaSolicitudCreditoRequest altaSolicitudCreditoRequest) throws java.rmi.RemoteException;
     public safisrv.ws.schemas.SolAltaClienteResponse solAltaCliente(safisrv.ws.schemas.SolAltaClienteRequest solAltaClienteRequest) throws java.rmi.RemoteException;

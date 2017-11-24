@@ -67,7 +67,7 @@ public class ClientesRestService {
 		List<TablaRuta> lista=new ArrayList<TablaRuta>();
 		String cobro ="";
 
-		String query="SELECT C.nombre as usuario,C.usuario claveUsuario,D.idCliente, CONCAT(D.nombre,' ',D.apellidoPaterno,' ',D.apellidoMaterno) as cliente,"
+		/*String query="SELECT C.nombre as usuario,C.usuario claveUsuario,D.idCliente, CONCAT(D.nombre,' ',D.apellidoPaterno,' ',D.apellidoMaterno) as cliente,"
 				+ " concat(B.horaDesde) as horaDesde,concat(B.horaHasta) horaHasta,A.pagoCuota,A.pagoCobroRealizado,A.pagoMontoCobrado,A.descripcion,"
 				+ " B.negocioLatitud,B.negocioLongitud,"
 				+ " CONCAT(B.negocioCalle,' ',B.negocioNoExt,' ',(select nombre From colonias col where col.id = B.negocioIdColonia and col.estado_id = B.negocioIdEntidadFederativa ),"
@@ -75,12 +75,36 @@ public class ClientesRestService {
 				+ " B.negocioNombre,A.CreditoId,folioSolicitud"
 				+ " FROM dbsanatf.lugares_cobro A, dbsanatf.solicitudes B, dbsanatf.User C,dbsanatf.clientes D,dbsanatf.bachtable E"
 				+ " where A.idCliente = B.idCliente and C.Usuario = '" + userId + "'"
-				+ " and fechaVisita between '" + fechaInicio + "' and '" + fechaFinal + "'"
+				//+ " and fechaVisita between '" + fechaInicio + "' and '" + fechaFinal + "'"
 				+ " and B.User_id=C.User_id"
 				+ " and A.idCliente = D.idCliente"
-				+ " and A.idCliente = E.ClienteId";
+				+ " and D.idClienteSANA  = E.ClienteId";*/
+		
+		/*String query="SELECT D.idCliente, CONCAT(D.nombre,' ',D.apellidoPaterno,' ',D.apellidoMaterno) as cliente,"
+				+ " concat(B.horaDesde) as horaDesde,concat(B.horaHasta) horaHasta,"
+		+ " B.negocioLatitud,B.negocioLongitud,B.negocioNombre,E.CreditoId,folioSolicitud,"
+		+ " CONCAT(B.negocioCalle,' ',B.negocioNoExt,' ',(select nombre From colonias col where col.id = B.negocioIdColonia and col.estado_id = B.negocioIdEntidadFederativa ), "
+		+ " ' ',(Select nombre from municipios M where M.estado_id = B.negocioIdEntidadFederativa and M.id = B.negocioIdMunicipio)) direccion "
+		+ " FROM dbsanatf.solicitudes B, dbsanatf.User C,dbsanatf.clientes D,dbsanatf.bachtable E"
+		+ " where C.Usuario ='" + userId + "'"
+		+ " and B.User_id=C.User_id"
+		+ " and B.idCliente = D.idCliente"
+		+ " and D.idClienteSANA = E.ClienteId";*/
 				
-				
+		String query="SELECT C.nombre as usuario,C.usuario claveUsuario,D.idCliente, CONCAT(D.nombre,' ',D.apellidoPaterno,' ',D.apellidoMaterno) as cliente,"
+				+ " concat(B.horaDesde) as horaDesde,concat(B.horaHasta) horaHasta,"
+				+ " round((E.MontototalExi*1.16),2) pagoCuota, 0 pagoCobroRealizado,0 pagoMontoCobrado, 'S/D' descripcion,"
+				+ " B.negocioLatitud,B.negocioLongitud,"
+				+ " CONCAT(B.negocioCalle,' ',B.negocioNoExt,' ',(select nombre From colonias col where col.id = B.negocioIdColonia and col.estado_id = B.negocioIdEntidadFederativa ),"
+				+ " ' ',(Select nombre from municipios M where M.estado_id = B.negocioIdEntidadFederativa and M.id = B.negocioIdMunicipio)) direccion,"
+				+ " B.negocioNombre,E.CreditoId,folioSolicitud"
+				+ " FROM  dbsanatf.solicitudes B, dbsanatf.User C,dbsanatf.clientes D,dbsanatf.bachtable E"
+				+ " where  C.Usuario = '" + userId + "'"
+				//+ " and FechaVencimiento between '" + fechaInicio + "' and '" + fechaFinal + "'"
+				+ " and FechaExigible <= '"  + fechaFinal + "'"
+				+ " and B.User_id=C.User_id"
+				+ " and B.idCliente = D.idCliente"
+				+ " and D.idClienteSANA  = E.ClienteId";		
 		
 		DataSource ds = (DataSource)ApplicationContextProvider.getApplicationContext().getBean("dataSource");
 		Connection c;

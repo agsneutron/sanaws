@@ -16,13 +16,24 @@ public class SAFIServiciosSoap11Stub extends org.apache.axis.client.Stub impleme
     static org.apache.axis.description.OperationDesc [] _operations;
 
     static {
-        _operations = new org.apache.axis.description.OperationDesc[5];
+        _operations = new org.apache.axis.description.OperationDesc[6];
         _initOperationDesc1();
     }
 
     private static void _initOperationDesc1(){
         org.apache.axis.description.OperationDesc oper;
         org.apache.axis.description.ParameterDesc param;
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("AltaSolicitudGrupalWS");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://safisrv/ws/schemas", "AltaSolicitudGrupalWSRequest"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://safisrv/ws/schemas", ">AltaSolicitudGrupalWSRequest"), safisrv.ws.schemas.AltaSolicitudGrupalWSRequest.class, false, false);
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("http://safisrv/ws/schemas", ">AltaSolicitudGrupalWSResponse"));
+        oper.setReturnClass(safisrv.ws.schemas.AltaSolicitudGrupalWSResponse.class);
+        oper.setReturnQName(new javax.xml.namespace.QName("http://safisrv/ws/schemas", "AltaSolicitudGrupalWSResponse"));
+        oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
+        oper.setUse(org.apache.axis.constants.Use.LITERAL);
+        _operations[0] = oper;
+
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("PagoCredito");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://safisrv/ws/schemas", "PagoCreditoRequest"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://safisrv/ws/schemas", ">PagoCreditoRequest"), safisrv.ws.schemas.PagoCreditoRequest.class, false, false);
@@ -32,7 +43,7 @@ public class SAFIServiciosSoap11Stub extends org.apache.axis.client.Stub impleme
         oper.setReturnQName(new javax.xml.namespace.QName("http://safisrv/ws/schemas", "PagoCreditoResponse"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[0] = oper;
+        _operations[1] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("altaSolicitudCredito");
@@ -43,7 +54,7 @@ public class SAFIServiciosSoap11Stub extends org.apache.axis.client.Stub impleme
         oper.setReturnQName(new javax.xml.namespace.QName("http://safisrv/ws/schemas", "altaSolicitudCreditoResponse"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[1] = oper;
+        _operations[2] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("SolAltaCliente");
@@ -54,7 +65,7 @@ public class SAFIServiciosSoap11Stub extends org.apache.axis.client.Stub impleme
         oper.setReturnQName(new javax.xml.namespace.QName("http://safisrv/ws/schemas", "SolAltaClienteResponse"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[2] = oper;
+        _operations[3] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("AltaGrupoWS");
@@ -65,7 +76,7 @@ public class SAFIServiciosSoap11Stub extends org.apache.axis.client.Stub impleme
         oper.setReturnQName(new javax.xml.namespace.QName("http://safisrv/ws/schemas", "AltaGrupoWSResponse"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[3] = oper;
+        _operations[4] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("ConsultaSaldoCredito");
@@ -76,7 +87,7 @@ public class SAFIServiciosSoap11Stub extends org.apache.axis.client.Stub impleme
         oper.setReturnQName(new javax.xml.namespace.QName("http://safisrv/ws/schemas", "ConsultaSaldoCreditoResponse"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[4] = oper;
+        _operations[5] = oper;
 
     }
 
@@ -109,6 +120,15 @@ public class SAFIServiciosSoap11Stub extends org.apache.axis.client.Stub impleme
             java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
             java.lang.Class simplelistsf = org.apache.axis.encoding.ser.SimpleListSerializerFactory.class;
             java.lang.Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
+            qName = new javax.xml.namespace.QName("http://safisrv/ws/schemas", ">>AltaSolicitudGrupalWSRequest>integrantes");
+            cachedSerQNames.add(qName);
+            cls = safisrv.ws.schemas.Integrante[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://safisrv/ws/schemas", "integrante");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
             qName = new javax.xml.namespace.QName("http://safisrv/ws/schemas", ">AltaGrupoWSRequest");
             cachedSerQNames.add(qName);
             cls = safisrv.ws.schemas.AltaGrupoWSRequest.class;
@@ -137,6 +157,20 @@ public class SAFIServiciosSoap11Stub extends org.apache.axis.client.Stub impleme
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
+            qName = new javax.xml.namespace.QName("http://safisrv/ws/schemas", ">AltaSolicitudGrupalWSRequest");
+            cachedSerQNames.add(qName);
+            cls = safisrv.ws.schemas.AltaSolicitudGrupalWSRequest.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://safisrv/ws/schemas", ">AltaSolicitudGrupalWSResponse");
+            cachedSerQNames.add(qName);
+            cls = safisrv.ws.schemas.AltaSolicitudGrupalWSResponse.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
             qName = new javax.xml.namespace.QName("http://safisrv/ws/schemas", ">ConsultaSaldoCreditoRequest");
             cachedSerQNames.add(qName);
             cls = safisrv.ws.schemas.ConsultaSaldoCreditoRequest.class;
@@ -147,6 +181,13 @@ public class SAFIServiciosSoap11Stub extends org.apache.axis.client.Stub impleme
             qName = new javax.xml.namespace.QName("http://safisrv/ws/schemas", ">ConsultaSaldoCreditoResponse");
             cachedSerQNames.add(qName);
             cls = safisrv.ws.schemas.ConsultaSaldoCreditoResponse.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://safisrv/ws/schemas", ">integrante");
+            cachedSerQNames.add(qName);
+            cls = safisrv.ws.schemas.Integrante.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -245,12 +286,46 @@ public class SAFIServiciosSoap11Stub extends org.apache.axis.client.Stub impleme
         }
     }
 
-    public safisrv.ws.schemas.PagoCreditoResponse pagoCredito(safisrv.ws.schemas.PagoCreditoRequest pagoCreditoRequest) throws java.rmi.RemoteException {
+    public safisrv.ws.schemas.AltaSolicitudGrupalWSResponse altaSolicitudGrupalWS(safisrv.ws.schemas.AltaSolicitudGrupalWSRequest altaSolicitudGrupalWSRequest) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
         _call.setOperation(_operations[0]);
+        _call.setUseSOAPAction(true);
+        _call.setSOAPActionURI("");
+        _call.setEncodingStyle(null);
+        _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
+        _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
+        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
+        _call.setOperationName(new javax.xml.namespace.QName("", "AltaSolicitudGrupalWS"));
+
+        setRequestHeaders(_call);
+        setAttachments(_call);
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {altaSolicitudGrupalWSRequest});
+
+        if (_resp instanceof java.rmi.RemoteException) {
+            throw (java.rmi.RemoteException)_resp;
+        }
+        else {
+            extractAttachments(_call);
+            try {
+                return (safisrv.ws.schemas.AltaSolicitudGrupalWSResponse) _resp;
+            } catch (java.lang.Exception _exception) {
+                return (safisrv.ws.schemas.AltaSolicitudGrupalWSResponse) org.apache.axis.utils.JavaUtils.convert(_resp, safisrv.ws.schemas.AltaSolicitudGrupalWSResponse.class);
+            }
+        }
+  } catch (org.apache.axis.AxisFault axisFaultException) {
+  throw axisFaultException;
+}
+    }
+
+    public safisrv.ws.schemas.PagoCreditoResponse pagoCredito(safisrv.ws.schemas.PagoCreditoRequest pagoCreditoRequest) throws java.rmi.RemoteException {
+        if (super.cachedEndpoint == null) {
+            throw new org.apache.axis.NoEndPointException();
+        }
+        org.apache.axis.client.Call _call = createCall();
+        _call.setOperation(_operations[1]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setEncodingStyle(null);
@@ -284,7 +359,7 @@ public class SAFIServiciosSoap11Stub extends org.apache.axis.client.Stub impleme
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[1]);
+        _call.setOperation(_operations[2]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setEncodingStyle(null);
@@ -318,7 +393,7 @@ public class SAFIServiciosSoap11Stub extends org.apache.axis.client.Stub impleme
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[2]);
+        _call.setOperation(_operations[3]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setEncodingStyle(null);
@@ -352,7 +427,7 @@ public class SAFIServiciosSoap11Stub extends org.apache.axis.client.Stub impleme
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[3]);
+        _call.setOperation(_operations[4]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setEncodingStyle(null);
@@ -386,7 +461,7 @@ public class SAFIServiciosSoap11Stub extends org.apache.axis.client.Stub impleme
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[4]);
+        _call.setOperation(_operations[5]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setEncodingStyle(null);

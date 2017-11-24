@@ -196,7 +196,8 @@ public class CatalogosRestService {
 
 		String query="SELECT id,estado_id,municipio_id,tipoAsentamiento,nombre,codigoPostal from colonias"
 				+ " where estado_id = " + idEstado
-				+ " and municipio_id = " + idMunicipio;
+				+ " and municipio_id = " + idMunicipio
+				+ " order by nombre";
 				
 		
 		DataSource ds = (DataSource)ApplicationContextProvider.getApplicationContext().getBean("dataSource");

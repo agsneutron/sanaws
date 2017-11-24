@@ -44,7 +44,7 @@ public class UploadFileService {
 	
 	    String output = "File uploaded to : " + uploadedFileLocation;
 	     
-	    Mensajes R=new Mensajes(0,1,"Se guardó correctamente la imágen");
+	    Mensajes R=new Mensajes(0,1,"Se guardÃ³ correctamente la imÃ¡gen");
 	    return R;
 	    //return Response.status(200).entity(output).build();
 	

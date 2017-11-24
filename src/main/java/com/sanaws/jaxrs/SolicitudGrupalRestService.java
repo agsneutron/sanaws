@@ -38,7 +38,7 @@ public class SolicitudGrupalRestService {
     	
     	String queryGrupo="Insert into grupos values(0,"
     			+ " (select User_Id from User where Usuario='" + User_id + "'),'"						 //int
-    			+ nombre + "',current_timestamp())"; //string, datetime 			
+    			+ nombre + "',current_timestamp(),0)"; //string, datetime 			
     			
     	DataSource ds = (DataSource)ApplicationContextProvider.getApplicationContext().getBean("dataSource");
 		Connection c;
@@ -53,17 +53,17 @@ public class SolicitudGrupalRestService {
 			ResultSet rs = stmt.getGeneratedKeys();
 			if (rs.next()) {				
 				autoIncKeyFromApi = rs.getInt(1);
-			    Mensajes R=new Mensajes(0,autoIncKeyFromApi,"Se guardó correctamente la solicitud");
+			    Mensajes R=new Mensajes(0,autoIncKeyFromApi,"Se guardÃ³ correctamente la solicitud");
 			    mensaje = R;
 			}else{
-				Mensajes R=new Mensajes(1,0,"Ocurrió un error registrar el grupo");
+				Mensajes R=new Mensajes(1,0,"OcurriÃ³ un error registrar el grupo");
 			    mensaje = R;
 			}
 			rs.close();
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			Mensajes R=new Mensajes(2,0,"Ocurrió una excepción al registrar el grupo");
+			Mensajes R=new Mensajes(2,0,"OcurriÃ³ una excepciÃ³n al registrar el grupo");
 		    mensaje = R;
 			e.printStackTrace();
 		}    	
@@ -129,7 +129,7 @@ public class SolicitudGrupalRestService {
 			@QueryParam("creditoOtro") String creditoOtro,
 			@QueryParam("creditoIdRenovacionAumento") String creditoIdRenovacionAumento,
 			@QueryParam("creditoIdTipoCredito") String creditoIdTipoCredito,
-			@QueryParam("comentarios") String comentarios, // anotarán proyecto: para qué van a usar el crédito
+			@QueryParam("comentarios") String comentarios, // anotarï¿½n proyecto: para quï¿½ van a usar el crï¿½dito
 			@QueryParam("autorizacionUsoDatos") String autorizacionUsoDatos,
 			@QueryParam("otroGiro") String otroGiro, 
 			@QueryParam("otroUsoRecursos") String otroUsoRecursos,
@@ -204,7 +204,7 @@ public class SolicitudGrupalRestService {
 			if (rs.next()) {
 			    idCliente = rs.getInt(1);			    
 			}else{
-				Mensajes R=new Mensajes(1,0,"Ocurrió un error registrar el cliente");
+				Mensajes R=new Mensajes(1,0,"OcurriÃ³ un error registrar el cliente");
 			    mensaje = R;
 			}
 			rs.close();
@@ -212,13 +212,13 @@ public class SolicitudGrupalRestService {
 			
 			//insertar solicitud
 			if (idCliente != -1){
-				String folioSolicitud="SG201703"+ idCliente;
+				String folioSolicitud="-" + idgrupo + "-"+ idCliente;
 				//String query="Insert into solicitudes values(0,(select User_Id from User where Usuario='"
 	    		//		+ User_id + "'),"
 				String query="Insert into solicitudes values(0,0,"
-	    	    		+ idCliente + ",'"
-	    	    		+ folioSolicitud + "','s/d','s/d','s/d',1,1,15,'s/d','s/d','s/d',1,'s/d','"
-	    	    		/*+ negocioCalle + "','"
+	    	    		+ idCliente + ",concat('SG',DATE_FORMAT(current_timestamp(),'%Y'),DATE_FORMAT(current_timestamp(),'%m'),'"
+	    	    		+ folioSolicitud + "'),'"  /*'s/d','s/d','s/d',1,1,15,'s/d','s/d','s/d',1,'s/d','"*/
+	    	    		+ negocioCalle + "','"
 	    	    		+ negocioNoExt + "','"
 	    	    		+ negocioNoInt + "',"
 	    	    		+ negocioIdColonia + ","
@@ -228,7 +228,7 @@ public class SolicitudGrupalRestService {
 	    	    		+ negocioTelefono + "','"
 	    	    		+ negocioReferencia + "',"
 	    	    		+ negocioIdGiro + ",'"
-	    	    		+ negocioAntiguedad + "','"*/
+	    	    		+ negocioAntiguedad + "','"
 	    	    		+ referenciaNombre1 + "','"
 	    	    		+ referenciaParentesco1 + "','"
 	    	    		+ referenciaTelefono1 + "','"
@@ -254,7 +254,7 @@ public class SolicitudGrupalRestService {
 	    	    		+ negocioLongitud + ",NULL,'"
 	    	    		//+ negocioNombre + "','"
 	    	    		+ horaDesde + "','"
-	    	    		+ horaHasta + "',0," + negocioCP + ",NULL,NULL,NULL,NULL,"+ idgrupo + ",NULL)";
+	    	    		+ horaHasta + "',0," + negocioCP + ",NULL,NULL,NULL,NULL,NULL,"+ idgrupo + ",NULL,0)";
 	    	    		/*+ horaHasta + "',0," + negocioCP + ",'"
 	    	    		+ fotoIdentificacion + "','" 
 	    	    		+ fotoComprobanteDomicilio + "','" 
@@ -267,10 +267,10 @@ public class SolicitudGrupalRestService {
 				int autoIncKeyFromApi = -1;
 				if (rss.next()) {
 				    autoIncKeyFromApi = rss.getInt(1);
-				    Mensajes R=new Mensajes(0,autoIncKeyFromApi,"Se guardó correctamente la solicitud");
+				    Mensajes R=new Mensajes(0,autoIncKeyFromApi,"Se guardÃ³ correctamente la solicitud");
 				    mensaje = R;
 				}else{
-					Mensajes R=new Mensajes(1,0,"Ocurrió un error al generar la clave de la solicitud");
+					Mensajes R=new Mensajes(1,0,"OcurriÃ³ un error al generar la clave de la solicitud");
 				    mensaje = R;
 				}
 				rss.close();
@@ -282,7 +282,7 @@ public class SolicitudGrupalRestService {
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			Mensajes R=new Mensajes(2,0,"Ocurrió una excepción al registrar la solicitud");
+			Mensajes R=new Mensajes(2,0,"OcurriÃ³ una excepciÃ³n al registrar la solicitud");
 		    mensaje = R;
 			e.printStackTrace();
 		}    	
@@ -374,6 +374,7 @@ public class SolicitudGrupalRestService {
 	public Mensajes guarda(	
 			@QueryParam("idsolicitud") String idsolicitud,
 			@QueryParam("fotoIdentificacion") String fotoIdentificacion, // vacio
+			@QueryParam("fotoIdentificacion2") String fotoIdentificacion2, // vacio
 			@QueryParam("fotoComprobanteDomicilio") String fotoComprobanteDomicilio, // vacio
 			@QueryParam("fotoComprobantePropiedad") String fotoComprobantePropiedad, // vacio
 			@QueryParam("fotoSolicitudBuro") String fotoSolicitudBuro // vacio
@@ -384,6 +385,7 @@ public class SolicitudGrupalRestService {
     	Mensajes mensaje = null;
     	
     	String queryCliente="update solicitudes set fotoIdentificacion = '" + fotoIdentificacion + "',"
+    			+ "fotoIdentificacion2 = '" + fotoIdentificacion2 + "',"
     			+ "fotoComprobanteDomicilio='" + fotoComprobanteDomicilio + "',"                       //string
     			+ "fotoComprobantePropiedad='" + fotoComprobantePropiedad + "',"              //string
     			+ "fotoSolicitudBuro='" + fotoSolicitudBuro + "'"              //string
@@ -398,14 +400,14 @@ public class SolicitudGrupalRestService {
 			Statement stmt = c.createStatement();
 			stmt.execute(queryCliente);
 
-			Mensajes R=new Mensajes(0,Integer.parseInt(idsolicitud) ,"Se guardó correctamente la información en la solicitud: " + idsolicitud);
+			Mensajes R=new Mensajes(0,Integer.parseInt(idsolicitud) ,"Se guardÃ³ correctamente la informaciÃ³n en la solicitud: " + idsolicitud);
 			mensaje = R;
 			c.close();
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			
-			Mensajes R=new Mensajes(1,0 ,"Ocurrió un error : Código de error =" + e.getErrorCode() + " Mensaje: " + e.getMessage());
+			Mensajes R=new Mensajes(1,0 ,"OcurriÃ³ un error : CÃ³digo de error =" + e.getErrorCode() + " Mensaje: " + e.getMessage());
 			mensaje = R;
 			e.printStackTrace();
 		} 	

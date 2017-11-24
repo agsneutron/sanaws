@@ -103,6 +103,7 @@ public class SolicitudRestService {
 			@QueryParam("horaHasta") String horaHasta,
 			@QueryParam("negocioCP") String negocioCP,
 			@QueryParam("fotoIdentificacion") String fotoIdentificacion,
+			@QueryParam("fotoIdentificacion2") String fotoIdentificacion2,
 			@QueryParam("fotoComprobanteDomicilio") String fotoComprobanteDomicilio,
 			@QueryParam("fotoComprobantePropiedad") String fotoComprobantePropiedad,
 			@QueryParam("fotoSolicitudBuro") String fotoSolicitudBuro
@@ -162,7 +163,7 @@ public class SolicitudRestService {
 			if (rs.next()) {
 			    idCliente = rs.getInt(1);			    
 			}else{
-				Mensajes R=new Mensajes(1,0,"Ocurrió un error registrar el cliente");
+				Mensajes R=new Mensajes(1,0,"OcurriÃ³ un error registrar el cliente");
 			    mensaje = R;
 			}
 			rs.close();
@@ -170,12 +171,13 @@ public class SolicitudRestService {
 			
 			//insertar solicitud
 			if (idCliente != -1){
-				String folioSolicitud="folio";
+				String folioSolicitud="-" + idCliente;
 				//String query="Insert into solicitudes values(0,(select User_Id from User where Usuario='"
 	    		//		+ User_id + "'),"
+				
 				String query="Insert into solicitudes values(0,0,"
-	    	    		+ idCliente + ",'"
-	    	    		+ folioSolicitud + "','"
+	    	    		+ idCliente + ","
+	    	    		+ "concat('SI',DATE_FORMAT(current_timestamp(),'%Y'),DATE_FORMAT(current_timestamp(),'%m'),'" + folioSolicitud + "'),'"
 	    	    		+ negocioCalle + "','"
 	    	    		+ negocioNoExt + "','"
 	    	    		+ negocioNoInt + "',"
@@ -214,9 +216,10 @@ public class SolicitudRestService {
 	    	    		+ horaDesde + "','"
 	    	    		+ horaHasta + "',0," + negocioCP + ",'"
 	    	    		+ fotoIdentificacion + "','" 
+	    	    		+ fotoIdentificacion2 + "','" 
 	    	    		+ fotoComprobanteDomicilio + "','" 
 	    	    		+ fotoComprobantePropiedad + "','" 
-	    	    		+ fotoSolicitudBuro + "',NULL,NULL)";
+	    	    		+ fotoSolicitudBuro + "',0,NULL,0)";
 	    	    		
 								
 				stmt.execute(query, Statement.RETURN_GENERATED_KEYS);
@@ -224,10 +227,10 @@ public class SolicitudRestService {
 				int autoIncKeyFromApi = -1;
 				if (rss.next()) {
 				    autoIncKeyFromApi = rss.getInt(1);
-				    Mensajes R=new Mensajes(0,autoIncKeyFromApi,"Se guardó correctamente la solicitud");
+				    Mensajes R=new Mensajes(0,autoIncKeyFromApi,"Se guardÃ³ correctamente la solicitud");
 				    mensaje = R;
 				}else{
-					Mensajes R=new Mensajes(1,0,"Ocurrió un error al generar la clave de la solicitud");
+					Mensajes R=new Mensajes(1,0,"OcurriÃ³ un error al generar la clave de la solicitud");
 				    mensaje = R;
 				}
 				rss.close();
@@ -239,7 +242,7 @@ public class SolicitudRestService {
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			Mensajes R=new Mensajes(2,0,"Ocurrió un error al registrar la solicitud");
+			Mensajes R=new Mensajes(2,0,"OcurriÃ³ un error al registrar la solicitud");
 		    mensaje = R;
 			e.printStackTrace();
 		}    	

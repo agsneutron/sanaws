@@ -55,7 +55,7 @@ public class SubeArchivoRestServide {
 			//FileOutputStream imageOutFile = new FileOutputStream("C:/ags/UploadedImages/" + fileName);
 			imageOutFile.write(imageByteArray);
 			
-			Mensajes R=new Mensajes(0,1,"Se guardÛ correctamente la im·gen");
+			Mensajes R=new Mensajes(0,1,"Se guard√≥ correctamente la im√°gen");
 		    mensaje = R;
 			
 			imageOutFile.close();
@@ -66,7 +66,7 @@ public class SubeArchivoRestServide {
 			Mensajes R=new Mensajes(1,0,"el directorio no existe");
 		    mensaje = R;
 		} catch (IOException ioe) {
-			Mensajes R=new Mensajes(2,0,"ExcepciÛn al convertir la im·gen" + ioe);
+			Mensajes R=new Mensajes(2,0,"Excepci√≥n al convertir la im√°gen" + ioe);
 		    mensaje = R;
 			System.out.println("Exception while converting the Image " + ioe);
 		}
@@ -77,7 +77,7 @@ public class SubeArchivoRestServide {
 	public Mensajes validadatos(String encodedImageStr,String fileName) {
 		Mensajes mensaje = null;
 					
-			Mensajes R=new Mensajes(100,100,"nombre de la im·gen es: " + fileName);
+			Mensajes R=new Mensajes(100,100,"nombre de la im√°gen es: " + fileName);
 		    mensaje = R;			
 		
 		return mensaje;

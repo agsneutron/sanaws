@@ -62,10 +62,11 @@ public class CobrosRestService {
 				ConsultaSaldoCreditoResponse res;
 				try {
 					res = servicio.consultaSaldoCredito(req);
-					CobroConsulta cobro = new CobroConsulta(res.getSaldoTotal(),res.getSaldoExigibleDia(),res.getProyeccion()
+					/*CobroConsulta cobro = new CobroConsulta(res.getSaldoTotal(),res.getSaldoExigibleDia(),res.getProyeccion()
 							,res.getCodigoRespuesta(),res.getMensajeRespuesta());
 					
-					return cobro;
+					return cobro;*/
+					return null;
 				} catch (RemoteException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -143,9 +144,87 @@ public class CobrosRestService {
 				@QueryParam("Folio") String Folio) 
 		{
 	    	
-			CobroConsulta cobro = new CobroConsulta("1500","250","250","1","Respuesta del WS");
+			CobroConsulta resultado=null; 
 			
-			return cobro;
+			SAFIServiciosServiceLocator locator = new SAFIServiciosServiceLocator();
+			SAFIServicios servicio;
+			String saldo = "0.00";
+			try {
+				servicio = locator.getSAFIServiciosSoap11();
+				ConsultaSaldoCreditoRequest req = new ConsultaSaldoCreditoRequest();
+				
+				req.setClaveUsuario(claveUsuario);
+				req.setCreditoID(creditoId);
+				req.setDispositivo(Dispositivo);
+				req.setFolio(Folio);
+				
+				
+				ConsultaSaldoCreditoResponse res;
+				try {
+						res = servicio.consultaSaldoCredito(req);
+						//saldo = res.getSaldoFinalPlazo();
+						saldo=res.getSaldoExigibleDia();
+						saldo=res.getSaldoTotal();
+				} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+				}
+					
+			} catch (ServiceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			String query="SELECT (SaldoCapVigent + SaldoCapAtrasad + SaldoCapVencido + SaldCapVenNoExi) Capital,"
+					+ " (SaldoInterProvi + SaldoInterAtras + SaldoInterVenc + SaldoIntNoConta) interes,"
+					+ " SaldoMoratorios moratorios,"
+					+ " MontototalExi subtotal, round((MontototalExi*0.16),2) iva, round((MontototalExi*1.16),2) total,"
+					+ " (SELECT CONCAT(idSucursal,' ',sucursal) FROM dbsanatf.sanaubicacion) sucursal,"
+					+ " (SELECT plaza FROM dbsanatf.sanaubicacion) plaza, CreditoID,"
+					+ " ClienteID,NombreCompleto,User.nombre cajero,curtime() hora,"
+					+ " DATE_FORMAT(CURDATE(), '%d-%m-%Y') fecha,"
+					+ " DATE_FORMAT(ADDDATE(FechaExigible, INTERVAL 7 DAY), '%d-%m-%Y') fechaproxima"
+					+ " FROM bachtable, solicitudes,User"
+					+ " where CreditoID = " + creditoId
+					+ " and bachtable.SolicitudCreditoID = solicitudes.SolicitudCreditoSafi"
+					+ " and solicitudes.User_id = User.User_Id";     
+
+			
+			DataSource ds = (DataSource)ApplicationContextProvider.getApplicationContext().getBean("dataSource");
+			Connection c;
+			try {
+				c = ds.getConnection();
+				Statement stmt = c.createStatement();
+				ResultSet rs = stmt.executeQuery(query);
+				
+				if (rs.next()) {
+					CobroConsulta cobro = new CobroConsulta(rs.getString("Capital"),rs.getString("interes"),rs.getString("moratorios"),
+							rs.getString("subtotal"),rs.getString("iva"),rs.getString("total"),saldo,
+							rs.getString("cajero"),rs.getString("sucursal"),rs.getString("plaza"),rs.getString("NombreCompleto"),
+							rs.getString("ClienteID"),rs.getString("CreditoID"),rs.getString("total"),rs.getString("fecha"),
+							rs.getString("hora"),rs.getString("fechaproxima"),"0","EXITO");
+					resultado = cobro;
+				}else{
+					CobroConsulta cobro = new CobroConsulta("","","",
+							"","","","",
+							"","","","",
+							"","","","","","","1","No existe informaci√≥n para el cr√©dito: " + creditoId);
+					resultado = cobro;
+				}
+				rs.close();				
+				c.close();
+
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				CobroConsulta cobro = new CobroConsulta("","","",
+						"","","","",
+						"","","","",
+						"","","","","","","2","Ocurri√≥ un error en la consulta.");
+				resultado = cobro;
+			} 		
+			
+			return resultado;
 		}	
 		
 	
@@ -162,24 +241,15 @@ public class CobrosRestService {
 		{
 			Mensajes mensaje = null;
 	    	String queryCliente="Insert into lugares_cobro values(0,"
-	    			+ "(SELECT B.idCliente FROM dbsanatf.bachtable A, dbsanatf.solicitudes B,dbsanatf.User C"
-	    			+ " where A.ClienteId = B.idCliente"
-	    			+ " and B.User_id = C.User_Id"
-	    			+ " and C.Usuario = '" + claveUsuario + "'"
-	    			+ " and A.CreditoId = '" + creditoId + "'),"                       //int
+	    			+ "(SELECT A.idCliente FROM dbsanatf.solicitudes A"
+	    			+ " where A.folioSolicitud ='" + Folio + "'),"                       //int
 	    			
-	    			+ "(SELECT B.negocioLatitud FROM dbsanatf.bachtable A, dbsanatf.solicitudes B,dbsanatf.User C"
-	    			+ " where A.ClienteId = B.idCliente"
-	    			+ " and B.User_id = C.User_Id"
-	    			+ " and C.Usuario = '" + claveUsuario + "'"
-	    			+ " and A.CreditoId = '" + creditoId + "')," 
+	    			+ "(SELECT A.negocioLatitud FROM dbsanatf.solicitudes A"
+	    			+ " where A.folioSolicitud ='" + Folio + "')," 
 	    			
-					+ "(SELECT B.negocioLongitud FROM dbsanatf.bachtable A, dbsanatf.solicitudes B,dbsanatf.User C"
-					+ " where A.ClienteId = B.idCliente"
-					+ " and B.User_id = C.User_Id"
-					+ " and C.Usuario = '" + claveUsuario + "'"
-					+ " and A.CreditoId = '" + creditoId + "')"  
-	    			+ ",'',1,null,(SELECT curdate()),0,(SELECT MontoTotalExigible FROM dbsanatf.bachtable where CreditoId = '" + creditoId + "')," + monto + ",1,(SELECT current_timestamp()),null,null,null"				 //char(1)
+					+ "(SELECT A.negocioLongitud FROM dbsanatf.solicitudes A"
+	    			+ " where  A.folioSolicitud ='" + Folio + "')" 
+	    			+ ",'',1,null,(SELECT curdate()),0,(SELECT round((MontototalExi*1.16),2)  FROM dbsanatf.bachtable where CreditoId = '" + creditoId + "')," + monto + ",1,(SELECT current_timestamp()),null,null,null"				 //char(1)
 	    			+ ",0," + creditoId + ",'"+ Folio +"','"+Dispositivo+"')";						 //string
 	    			
 	    				    	
@@ -200,10 +270,10 @@ public class CobrosRestService {
 				ResultSet rs = stmt.getGeneratedKeys();
 				if (rs.next()) {
 					idRegistro = rs.getInt(1);
-					Mensajes R=new Mensajes(0,idRegistro,"Se guardÛ correctamente el registro");
+					Mensajes R=new Mensajes(0,idRegistro,"Se guard√≥ correctamente el registro");
 					mensaje = R;
 				}else{
-					Mensajes R=new Mensajes(1,0,"OcurriÛ un error en el registro");
+					Mensajes R=new Mensajes(1,0,"Ocurri√≥ un error en el registro");
 				    mensaje = R;
 				}
 				rs.close();
@@ -211,7 +281,7 @@ public class CobrosRestService {
 
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				Mensajes R=new Mensajes(2,0,"OcurriÛ un error al generar el registro");
+				Mensajes R=new Mensajes(2,0,"Ocurri√≥ un error al generar el registro");
 			    mensaje = R;
 				e.printStackTrace();
 			}    	
@@ -274,9 +344,9 @@ public class CobrosRestService {
 				ResultSet rs = stmt.getGeneratedKeys();
 				if (rs.next()) {
 					idRegistro = rs.getInt(1);
-					Mensajes R=new Mensajes(0,idRegistro,"Se guardÛ correctamente el registro");
+					Mensajes R=new Mensajes(0,idRegistro,"Se guard√≥ correctamente el registro");
 				}else{
-					Mensajes R=new Mensajes(1,0,"OcurriÛ un error en el registro");
+					Mensajes R=new Mensajes(1,0,"Ocurri√≥ un error en el registro");
 				    mensaje = R;
 				}
 				rs.close();
@@ -284,7 +354,7 @@ public class CobrosRestService {
 
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				Mensajes R=new Mensajes(2,0,"OcurriÛ un error al generar el registro");
+				Mensajes R=new Mensajes(2,0,"Ocurri√≥ un error al generar el registro");
 			    mensaje = R;
 				e.printStackTrace();
 			}    	
